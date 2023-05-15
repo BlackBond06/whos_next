@@ -21,6 +21,20 @@ const closeModal = document.querySelector(".close");
 
 /*  ********************************************************************************  */
 
+// Global Variables
+
+let PurchaseArray = [];
+let checker = 0;
+let savedNumber;
+let waterPurchaseRoster = [
+  "Stephen Uzodike",
+  "Emeka Achugbu",
+  "Fredrick Ogbe",
+  "osita",
+];
+
+/*  ********************************************************************************  */
+
 // Functions
 const getImage = (profile) => {
   switch (profile) {
@@ -52,7 +66,7 @@ const getImage = (profile) => {
 const buyItem = () => {
   // check roster for whose turn to purchase water
   let name = profileName.textContent;
-  let msg = name === "Uzodike Stephen" ? 1 : name === "Emeka Achugbu" ? 2 : 0;
+  const msg = name === "Uzodike Stephen" ? 1 : name === "Emeka Achugbu" ? 2 : 0;
   PurchaseArray.push(name);
   const namesWithoutDuplicates = [...new Set(PurchaseArray)];
   if (PurchaseArray.length > 1 && PurchaseArray[checker++] === name) {
@@ -69,24 +83,25 @@ const buyItem = () => {
     document.getElementById("close-modal").textContent =
       "Water purchsed successfully!";
     modal.style.display = "block";
+    localStorage.setItem('myNumber', msg);
     document.querySelector(".status-value").textContent = waterPurchaseRoster[msg].split(" ")[0];
   }
 
-  console.log(checker);
+  
 };
+
+const getNumberFromLocalStorage = ()=> {
+  return localStorage.getItem('myNumber');
+}
+
+window.addEventListener('load', ()=> {
+  savedNumber = getNumberFromLocalStorage();
+  document.querySelector(".status-value").textContent = waterPurchaseRoster[savedNumber].split(" ")[0];
+});
 
 /*  ********************************************************************************  */
 
-// Global Variables
 
-let PurchaseArray = [];
-let checker = 0;
-let waterPurchaseRoster = [
-  "Stephen Uzodike",
-  "Emeka Achugbu",
-  "Fredrick Ogbe",
-  "osita",
-];
 
 /*  ********************************************************************************  */
 
