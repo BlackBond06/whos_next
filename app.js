@@ -49,7 +49,31 @@ const getImage = (profile) => {
   }
 };
 
+const buyItem = () => {
+  // check roster for whose turn to purchase water
+  let name = profileName.textContent;
+  let msg = name === "Uzodike Stephen" ? 1 : name === "Emeka Achugbu" ? 2 : 0;
+  PurchaseArray.push(name);
+  const namesWithoutDuplicates = [...new Set(PurchaseArray)];
+  if (PurchaseArray.length > 1 && PurchaseArray[checker++] === name) {
+    document.getElementById(
+      "close-modal"
+    ).textContent = `Sorry already purchased! next purchase ${waterPurchaseRoster[msg]}`;
+    modal.style.display = "block";
+    return;
+  } else if (namesWithoutDuplicates.length > 3) {
+    PurchaseArray = [];
+    checker = 0;
+    return;
+  } else {
+    document.getElementById("close-modal").textContent =
+      "Water purchsed successfully!";
+    modal.style.display = "block";
+    document.querySelector(".status-value").textContent = waterPurchaseRoster[msg].split(" ")[0];
+  }
 
+  console.log(checker);
+};
 
 /*  ********************************************************************************  */
 
@@ -87,30 +111,7 @@ profileBtn.addEventListener("click", (e) => {
   getImage(selectOption);
 });
 
-buyBtn.addEventListener("click", () => {
-  // check roster for whose turn to purchase water
-  let name = profileName.textContent;
-  let msg = name === "Uzodike Stephen" ? 1 : name === "Emeka Achugbu" ? 2 : 0;
-  PurchaseArray.push(name);
-  const namesWithoutDuplicates = [...new Set(PurchaseArray)];
-  if (PurchaseArray.length > 1 && PurchaseArray[checker++] === name) {
-    document.getElementById(
-      "close-modal"
-    ).textContent = `Sorry already purchased! next purchase ${waterPurchaseRoster[msg]}`;
-    modal.style.display = "block";
-    return;
-  } else if (namesWithoutDuplicates.length > 3) {
-    PurchaseArray = [];
-    checker = 0;
-    return;
-  } else {
-    document.getElementById("close-modal").textContent =
-      "Water purchsed successfully!";
-    modal.style.display = "block";
-  }
-
-  console.log(checker);
-});
+buyBtn.addEventListener("click", buyItem);
 
 buyHistoryBtn.addEventListener("click", () => {
   profileCard.classList.add("card");
