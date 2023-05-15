@@ -18,6 +18,7 @@ const returnBtn = buyHistory.querySelector(".center .arrow-back");
 const homeMenu = document.querySelector(".home");
 const modal = document.querySelector(".modal");
 const closeModal = document.querySelector(".close");
+const nextBuyer = document.querySelector(".status-value");
 
 /*  ********************************************************************************  */
 
@@ -84,7 +85,7 @@ const buyItem = () => {
       "Water purchsed successfully!";
     modal.style.display = "block";
     localStorage.setItem('myNumber', msg);
-    document.querySelector(".status-value").textContent = waterPurchaseRoster[msg].split(" ")[0];
+    nextBuyer.textContent = waterPurchaseRoster[msg].split(" ")[0];
   }
 
   
@@ -94,13 +95,13 @@ const getNumberFromLocalStorage = ()=> {
   return localStorage.getItem('myNumber');
 }
 
-window.addEventListener('load', ()=> {
-  savedNumber = getNumberFromLocalStorage();
-  document.querySelector(".status-value").textContent = waterPurchaseRoster[savedNumber].split(" ")[0];
-});
 
 /*  ********************************************************************************  */
-
+// load windows 
+window.addEventListener('load', ()=> {
+  savedNumber = getNumberFromLocalStorage();
+  nextBuyer.textContent = waterPurchaseRoster[savedNumber].split(" ")[0];
+});
 
 
 /*  ********************************************************************************  */
