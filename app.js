@@ -49,6 +49,8 @@ const getImage = (profile) => {
   }
 };
 
+
+
 /*  ********************************************************************************  */
 
 // Global Variables
@@ -86,6 +88,7 @@ profileBtn.addEventListener("click", (e) => {
 });
 
 buyBtn.addEventListener("click", () => {
+  // check roster for whose turn to purchase water
   let name = profileName.textContent;
   let msg = name === "Uzodike Stephen" ? 1 : name === "Emeka Achugbu" ? 2 : 0;
   PurchaseArray.push(name);
