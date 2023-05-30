@@ -34,6 +34,9 @@ let waterPurchaseRoster = [
   "osita",
 ];
 
+//object to store purchase history
+const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || {}
+
 /*  ********************************************************************************  */
 
 // Functions
@@ -44,6 +47,7 @@ const getImage = (profile) => {
       profilePage.style.display = "block";
       profileImg.style.backgroundImage = "url(Assets/Nugo.jpg)";
       profileName.textContent = profile;
+      displayPurchaseHistory(profile);
       break;
     case "Fredrick Ogbe":
       document.querySelector(".landing--page--container").style.display =
@@ -51,6 +55,7 @@ const getImage = (profile) => {
       profilePage.style.display = "block";
       profileImg.style.backgroundImage = "url(Assets/fred1.jpg)";
       profileName.textContent = profile;
+      displayPurchaseHistory(profile);
       break;
     case "Emeka Achugbu":
       document.querySelector(".landing--page--container").style.display =
@@ -58,11 +63,51 @@ const getImage = (profile) => {
       profilePage.style.display = "block";
       profileImg.style.backgroundImage = "url(Assets/e-money.jpg)";
       profileName.textContent = profile;
+      displayPurchaseHistory(profile);
       break;
     default:
       pageContainer.style.display = "flex";
   }
 };
+
+const getNumberFromLocalStorage = () => {
+  return localStorage.getItem("myNumber");
+};
+const savePurchaseHistory = ()=> {
+  localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
+}
+
+const recordPurchase = (person) => {
+  const currentDate = new Date();
+  const purchaseInfo = {
+    date: currentDate.toLocaleDateString(),
+    time: currentDate.toLocaleTimeString(),
+  };
+
+  if (!purchaseHistory[person]) {
+    purchaseHistory[person] = [purchaseInfo];
+  } else {
+    purchaseHistory[person].push(purchaseInfo);
+  }
+  savePurchaseHistory();
+};
+
+const displayPurchaseHistory = (person)=> {
+  const purchaseHistoryElement = document.querySelector('.purchase--history');
+  purchaseHistoryElement.innerHTML = ''; // Clear the content of the element
+
+  if (purchaseHistory[person]) {
+    purchaseHistory[person].forEach((purchase) => {
+      const purchaseItem = document.createElement('div');
+      purchaseItem.innerText = `Date: ${purchase.date}, Time: ${purchase.time}`;
+      purchaseHistoryElement.appendChild(purchaseItem);
+    });
+  } else {
+    const noHistoryItem = document.createElement('div');
+    noHistoryItem.innerText = 'No purchase history available.';
+    purchaseHistoryElement.appendChild(noHistoryItem);
+  }
+}
 
 const buyItem = () => {
   // check roster for whose turn to purchase water
@@ -84,25 +129,19 @@ const buyItem = () => {
     document.getElementById("close-modal").textContent =
       "Water purchsed successfully!";
     modal.style.display = "block";
-    localStorage.setItem('myNumber', msg);
+    localStorage.setItem("myNumber", msg);
     nextBuyer.textContent = waterPurchaseRoster[msg].split(" ")[0];
+    recordPurchase(name);
+    displayPurchaseHistory(name);
   }
-
-  
 };
 
-const getNumberFromLocalStorage = ()=> {
-  return localStorage.getItem('myNumber');
-}
-
-
 /*  ********************************************************************************  */
-// load windows 
-window.addEventListener('load', ()=> {
+// load windows
+window.addEventListener("load", () => {
   savedNumber = getNumberFromLocalStorage();
   nextBuyer.textContent = waterPurchaseRoster[savedNumber].split(" ")[0];
 });
-
 
 /*  ********************************************************************************  */
 
