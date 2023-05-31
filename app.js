@@ -27,15 +27,11 @@ const nextBuyer = document.querySelector(".status-value");
 let PurchaseArray = [];
 let checker = 0;
 let savedNumber;
-let waterPurchaseRoster = [
-  "Stephen Uzodike",
-  "Emeka Achugbu",
-  "Fredrick Ogbe",
-  "osita",
-];
+let waterPurchaseRoster = ["Uzodike Stephen", "Emeka Achugbu", "Fredrick Ogbe"];
 
 //object to store purchase history
-const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || {}
+const purchaseHistory =
+  JSON.parse(localStorage.getItem("purchaseHistory")) || {};
 
 /*  ********************************************************************************  */
 
@@ -73,9 +69,9 @@ const getImage = (profile) => {
 const getNumberFromLocalStorage = () => {
   return localStorage.getItem("myNumber");
 };
-const savePurchaseHistory = ()=> {
-  localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
-}
+const savePurchaseHistory = () => {
+  localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
+};
 
 const recordPurchase = (person) => {
   const currentDate = new Date();
@@ -92,45 +88,47 @@ const recordPurchase = (person) => {
   savePurchaseHistory();
 };
 
-const displayPurchaseHistory = (person)=> {
-  const purchaseHistoryElement = document.querySelector('.purchase--history');
-  purchaseHistoryElement.innerHTML = ''; // Clear the content of the element
+const displayPurchaseHistory = (person) => {
+  const purchaseHistoryElement = document.querySelector(".purchase--history");
+  purchaseHistoryElement.innerHTML = ""; // Clear the content of the element
 
   if (purchaseHistory[person]) {
     purchaseHistory[person].forEach((purchase) => {
-      const purchaseItem = document.createElement('div');
+      const purchaseItem = document.createElement("div");
       purchaseItem.innerText = `Date: ${purchase.date}, Time: ${purchase.time}`;
       purchaseHistoryElement.appendChild(purchaseItem);
     });
   } else {
-    const noHistoryItem = document.createElement('div');
-    noHistoryItem.innerText = 'No purchase history available.';
+    const noHistoryItem = document.createElement("div");
+    noHistoryItem.innerText = "No purchase history available.";
     purchaseHistoryElement.appendChild(noHistoryItem);
   }
-}
+};
 
 const buyItem = () => {
-  // check roster for whose turn to purchase water
   let name = profileName.textContent;
-  const msg = name === "Uzodike Stephen" ? 1 : name === "Emeka Achugbu" ? 2 : 0;
-  PurchaseArray.push(name);
-  const namesWithoutDuplicates = [...new Set(PurchaseArray)];
-  if (PurchaseArray.length > 1 && PurchaseArray[checker++] === name) {
+  if (name !== waterPurchaseRoster[checker]) {
     document.getElementById(
       "close-modal"
-    ).textContent = `Sorry already purchased! next purchase ${waterPurchaseRoster[msg]}`;
+    ).textContent = `Sorry already purchased! next purchase ${waterPurchaseRoster[checker]}`;
     modal.style.display = "block";
     return;
-  } else if (namesWithoutDuplicates.length > 3) {
-    PurchaseArray = [];
+  } else if (waterPurchaseRoster[checker] === "Fredrick Ogbe") {
     checker = 0;
+    nextBuyer.textContent = waterPurchaseRoster[checker]?.split(" ")[0];
+    document.getElementById("close-modal").textContent =
+      "Water purchsed successfully!";
+    modal.style.display = "block";
+    recordPurchase(name);
+    displayPurchaseHistory(name);
     return;
   } else {
     document.getElementById("close-modal").textContent =
       "Water purchsed successfully!";
     modal.style.display = "block";
-    localStorage.setItem("myNumber", msg);
-    nextBuyer.textContent = waterPurchaseRoster[msg].split(" ")[0];
+    checker++;
+    localStorage.setItem("myNumber", checker);
+    nextBuyer.textContent = waterPurchaseRoster[checker]?.split(" ")[0];
     recordPurchase(name);
     displayPurchaseHistory(name);
   }
@@ -140,7 +138,7 @@ const buyItem = () => {
 // load windows
 window.addEventListener("load", () => {
   savedNumber = getNumberFromLocalStorage();
-  nextBuyer.textContent = waterPurchaseRoster[savedNumber].split(" ")[0];
+  nextBuyer.textContent = waterPurchaseRoster[checker].split(" ")[0];
 });
 
 /*  ********************************************************************************  */
