@@ -1,4 +1,5 @@
 // || Select all elements
+
 const selectWrap = document.querySelector(".select--wrap");
 const defaultWrap = document.querySelector(".default--wrap");
 const listItems = document.querySelectorAll(".select--ul li");
@@ -19,14 +20,15 @@ const homeMenu = document.querySelector(".home");
 const modal = document.querySelector(".modal");
 const closeModal = document.querySelector(".close");
 const nextBuyer = document.querySelector(".status-value");
+const buyCount = document.getElementById("buy-count");
 
 /*  ********************************************************************************  */
 
 // Global Variables
 
 let PurchaseArray = [];
-let checker = 0;
 let savedNumber;
+let checker = 0;
 let waterPurchaseRoster = ["Uzodike Stephen", "Emeka Achugbu", "Fredrick Ogbe"];
 
 //object to store purchase history
@@ -85,12 +87,14 @@ const recordPurchase = (person) => {
   } else {
     purchaseHistory[person].push(purchaseInfo);
   }
+
   savePurchaseHistory();
 };
 
 const displayPurchaseHistory = (person) => {
   const purchaseHistoryElement = document.querySelector(".purchase--history");
   purchaseHistoryElement.innerHTML = ""; // Clear the content of the element
+  buyCount.textContent = "";
 
   if (purchaseHistory[person]) {
     purchaseHistory[person].forEach((purchase) => {
@@ -98,10 +102,12 @@ const displayPurchaseHistory = (person) => {
       purchaseItem.innerText = `Date: ${purchase.date}, Time: ${purchase.time}`;
       purchaseHistoryElement.appendChild(purchaseItem);
     });
+    buyCount.textContent = purchaseHistory[person].length;
   } else {
     const noHistoryItem = document.createElement("div");
     noHistoryItem.innerText = "No purchase history available.";
     purchaseHistoryElement.appendChild(noHistoryItem);
+    buyCount.textContent = 0;
   }
 };
 
@@ -136,9 +142,12 @@ const buyItem = () => {
 
 /*  ********************************************************************************  */
 // load windows
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
   savedNumber = getNumberFromLocalStorage();
-  nextBuyer.textContent = waterPurchaseRoster[checker].split(" ")[0];
+  checker = savedNumber ? savedNumber : checker;
+  nextBuyer.textContent = savedNumber
+    ? waterPurchaseRoster[savedNumber].split(" ")[0]
+    : waterPurchaseRoster[0].split(" ")[0];
 });
 
 /*  ********************************************************************************  */
