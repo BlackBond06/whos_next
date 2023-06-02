@@ -21,6 +21,7 @@ const modal = document.querySelector(".modal");
 const closeModal = document.querySelector(".close");
 const nextBuyer = document.querySelector(".status-value");
 const buyCount = document.getElementById("buy-count");
+const modalAlert = document.getElementById("close-modal");
 
 /*  ********************************************************************************  */
 
@@ -114,22 +115,20 @@ const displayPurchaseHistory = (person) => {
 const buyItem = () => {
   let name = profileName.textContent;
   if (name !== waterPurchaseRoster[checker]) {
-    document.getElementById(
-      "close-modal"
-    ).textContent = `Sorry already purchased! next purchase ${waterPurchaseRoster[checker]}`;
+    modalAlert.textContent = `Sorry already purchased! next purchase ${waterPurchaseRoster[checker]}`;
     modal.style.display = "block";
     return;
   } else if (waterPurchaseRoster[checker] === "Fredrick Ogbe") {
     checker = 0;
     nextBuyer.textContent = waterPurchaseRoster[checker]?.split(" ")[0];
-    document.getElementById("close-modal").textContent =
+    modalAlert.textContent =
       "Water purchsed successfully!";
     modal.style.display = "block";
     recordPurchase(name);
     displayPurchaseHistory(name);
     return;
   } else {
-    document.getElementById("close-modal").textContent =
+    modalAlert.textContent =
       "Water purchsed successfully!";
     modal.style.display = "block";
     checker++;

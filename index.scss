@@ -421,12 +421,15 @@ main {
 @media screen and (max-width: 470px) {
   main .modal {
     .modal-content {
-      width: 100%;
+      text-align: center;
+      padding: 1rem;
+      width: 90%;
     }
 
     .close {
+      position: absolute;
       right: 1em;
-      top: 2rem;
+      z-index: 5;
     }
   }
 }
