@@ -432,4 +432,16 @@ main {
       z-index: 5;
     }
   }
+
+  main .box{
+    width: 100%;
+
+    .profile-card{
+     width: inherit;
+    }
+  }
+
+  main .landing--page--container{
+    max-width: unset;
+  }
 }
