@@ -20,6 +20,7 @@ const homeMenu = document.querySelector(".home");
 const modal = document.querySelector(".modal");
 const closeModal = document.querySelector(".close");
 const nextBuyer = document.querySelector(".status-value");
+const nextDate = document.querySelector(".next--date");
 const buyCount = document.getElementById("buy-count");
 const modalAlert = document.getElementById("close-modal");
 
@@ -96,6 +97,10 @@ const displayPurchaseHistory = (person) => {
   const purchaseHistoryElement = document.querySelector(".purchase--history");
   purchaseHistoryElement.innerHTML = ""; // Clear the content of the element
   buyCount.textContent = "";
+  nextDate.textContent = "";
+  const lastPurchaseDay = new Date("2023-05-20");
+  const nextPurchaseDay = calculateNextPurchaseDay(lastPurchaseDay);
+
 
   if (purchaseHistory[person]) {
     purchaseHistory[person].forEach((purchase) => {
@@ -104,16 +109,46 @@ const displayPurchaseHistory = (person) => {
       purchaseHistoryElement.appendChild(purchaseItem);
     });
     buyCount.textContent = purchaseHistory[person].length;
+    nextDate.textContent = nextPurchaseDay.toDateString().split(" ")[0];
   } else {
     const noHistoryItem = document.createElement("div");
     noHistoryItem.innerText = "No purchase history available.";
     purchaseHistoryElement.appendChild(noHistoryItem);
     buyCount.textContent = 0;
+    nextDate.textContent = new Date().toDateString().split(" ")[0];
+  }
+};
+
+const calculateNextPurchaseDay = (lastPurchaseDay) => {
+  const today = new Date();
+  const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000; // 2 days in milliseconds
+
+  const nextPurchaseDay = new Date(
+    lastPurchaseDay.getTime() + twoDaysInMilliseconds
+  );
+
+  // Check if the next purchase day is in the future
+  if (nextPurchaseDay > today) {
+    return nextPurchaseDay;
+  } else {
+    // If the next purchase day has already passed, calculate the new next purchase day
+    const differenceInDays = Math.ceil(
+      (today - lastPurchaseDay) / (1000 * 60 * 60 * 24)
+    );
+    const remainingDays = 2 - (differenceInDays % 2);
+    const newNextPurchaseDay = new Date(
+      today.getTime() + remainingDays * 24 * 60 * 60 * 1000
+    );
+    return newNextPurchaseDay;
   }
 };
 
 const buyItem = () => {
   let name = profileName.textContent;
+  //const lastPurchaseDay = new Date("2023-05-20");
+  //const nextPurchaseDay = calculateNextPurchaseDay(lastPurchaseDay);
+ // console.log(nextPurchaseDay.toDateString()); // Output: e.g., "Sat May 22 2023"
+
   if (name !== waterPurchaseRoster[checker]) {
     modalAlert.textContent = `Sorry already purchased! next purchase ${waterPurchaseRoster[checker]}`;
     modal.style.display = "block";
@@ -121,15 +156,13 @@ const buyItem = () => {
   } else if (waterPurchaseRoster[checker] === "Fredrick Ogbe") {
     checker = 0;
     nextBuyer.textContent = waterPurchaseRoster[checker]?.split(" ")[0];
-    modalAlert.textContent =
-      "Water purchsed successfully!";
+    modalAlert.textContent = "Water purchsed successfully!";
     modal.style.display = "block";
     recordPurchase(name);
     displayPurchaseHistory(name);
     return;
   } else {
-    modalAlert.textContent =
-      "Water purchsed successfully!";
+    modalAlert.textContent = "Water purchsed successfully!";
     modal.style.display = "block";
     checker++;
     localStorage.setItem("myNumber", checker);
