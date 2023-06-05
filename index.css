@@ -360,10 +360,22 @@ main .modal .modal-content {
 
 @media screen and (max-width: 470px) {
   main .modal .modal-content {
-    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    width: 90%;
   }
   main .modal .close {
+    position: absolute;
     right: 1em;
-    top: 2rem;
+    z-index: 5;
+  }
+  main .box {
+    width: 100%;
+  }
+  main .box .profile-card {
+    width: inherit;
+  }
+  main .landing--page--container {
+    max-width: unset;
   }
 }/*# sourceMappingURL=index.css.map */
