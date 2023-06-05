@@ -414,6 +414,8 @@ main {
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      text-align: center;
+      padding: 1rem;
     }
   }
 }
@@ -421,8 +423,6 @@ main {
 @media screen and (max-width: 470px) {
   main .modal {
     .modal-content {
-      text-align: center;
-      padding: 1rem;
       width: 90%;
     }
 
